@@ -2,15 +2,23 @@
 {%block content%}
 <div class="container" style="position: relative; top: 50vh;">
     <form method="POST" action="{{url_for('cap_nhat_tu_API')}}">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <button class="btn btn-success">Cập nhật danh sách đơn hàng</button>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button class="btn btn-success">Cập nhật danh sách đơn hàng</button>
+            </div>
         </div>
-    </div>
     </form>
     <div class="row">
         <div class="col-md-12 text-center">
-            Loading: {{loading}} %
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
         </div>
     </div>
     <div class="row">
