@@ -65,13 +65,19 @@ def cap_nhat_tu_API():
     da_xong = 0
     
     if request.method == 'POST':
-        for item in danh_sach:
-            order = Lay_thong_tin_chi_tiet_order(item['salesOrder']['orderNumber'])
-            cap_nhat_hoa_don_database(order)
-            da_xong += 1
-            phan_tram = str(100*(da_xong/len(danh_sach)))
-            flash('Đã hoàn tất '+ phan_tram + " %") 
-        thong_bao = "Cập nhật hoàn tất lúc %s" % datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+        def generate():
+            for item in danh_sach:
+                order = Lay_thong_tin_chi_tiet_order(item['salesOrder']['orderNumber'])
+                yield "<br/>"   # notice that we are yielding something as soon as possible
+                yield str(item['salesOrder']['orderNumber'])
+        return Response(generate(), mimetype='text/html')
+        
+        # for item in danh_sach:
+        #     order = Lay_thong_tin_chi_tiet_order(item['salesOrder']['orderNumber'])
+        #     cap_nhat_hoa_don_database(order)
+                
+        #     return Response(, mimetype='text/html')
+        # thong_bao = "Cập nhật hoàn tất lúc %s" % datetime.now().strftime('%d-%m-%Y %H:%M:%S')
     return render_template('Quan_ly/QL_don_hang/Cap_nhat_don_hang.html', thong_bao = thong_bao)
 
 @app.route('/QL-don-hang', methods =['GET','POST'])
