@@ -61,12 +61,17 @@ def index():
 @app.route('/cap-nhat-don-hang',methods=['GET','POST'])
 def cap_nhat_tu_API():
     thong_bao = ''
+    danh_sach = Lay_danh_sach_order()
+    da_xong = 0
+    loading = da_xong/len(danh_sach)
     if request.method == 'POST':
-        for item in Lay_danh_sach_order():
+        for item in danh_sach:
             order = Lay_thong_tin_chi_tiet_order(item['salesOrder']['orderNumber'])
             cap_nhat_hoa_don_database(order)
+            da_xong += 1
+            loading = da_xong/len(danh_sach)
         thong_bao = "Cập nhật hoàn tất lúc %s" % datetime.now().strftime('%d-%m-%Y %H:%M:%S')
-    return render_template('Quan_ly/QL_don_hang/Cap_nhat_don_hang.html', thong_bao = thong_bao)
+    return render_template('Quan_ly/QL_don_hang/Cap_nhat_don_hang.html', loading = loading, thong_bao = thong_bao)
 
 @app.route('/QL-don-hang', methods =['GET','POST'])
 def ql_don_hang():
